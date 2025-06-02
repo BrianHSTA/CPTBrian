@@ -3,30 +3,44 @@ import arc.*;
 public class connect4{
 	public static void main(String[] args){
 	Console con = new Console();
+	//[x][y]
 	int intBoard[][];
 	intBoard = new int[7][6];
 	
-	int intMove;
+	int intPieceCoordinate[];
+	intPieceCoordinate = new int[2];
+	
+	int intMove = 0;
 	int intPlayer = 1;
 	int intNewBoard[][];
 	int intMoveCount = 0;
-	while (intMoveCount < 42){
+
+	while (intMoveCount <= 42){
 	
 		intMove = con.readInt();
-		intMove = intMove-1;
-		intNewBoard = connect4methods.updateBoard(intBoard, intMove, intPlayer);
-		con.println(intNewBoard[0][0]);
-		con.println(intNewBoard[0][1]);
-		con.println(intNewBoard[0][2]);
-		con.println(intNewBoard[0][3]);
-		con.println(intNewBoard[0][4]);
-		con.println(intNewBoard[0][5]);
-		if ((intBoard[intMove][0] == intNewBoard[intMove][0]) && (intBoard[intMove][1] == intNewBoard[intMove][1]) && (intBoard[intMove][2] == intNewBoard[intMove][2]) && (intBoard[intMove][3] == intNewBoard[intMove][3]) && (intBoard[intMove][4] == intNewBoard[intMove][4]) && (intBoard[intMove][5] == intNewBoard[intMove][5])){
+		intMove--;
+		intPieceCoordinate = connect4methods.intPieceCoordinate(intBoard, intMove, intPlayer);
+		
+		int intTestCount;
+		for (intTestCount = 0; intTestCount <= 6; intTestCount++){
+			con.println(intBoard[intTestCount][0]+" - "+intBoard[intTestCount][1]+" - "+intBoard[intTestCount][2]+" - "+intBoard[intTestCount][3]+" - "+intBoard[intTestCount][4]+" - "+intBoard[intTestCount][5]);
+		}
+
+		//con.println(intNewBoard[intMove][0]);
+		//con.println(intNewBoard[intMove][1]);
+		//con.println(intNewBoard[intMove][2]);
+		//con.println(intNewBoard[intMove][3]);
+		//con.println(intNewBoard[intMove][4]);
+		//con.println(intNewBoard[intMove][5]);
+		
+		if (intPieceCoordinate[0] == -1 && intPieceCoordinate[1] == -1){
 			con.println("Invalid move, go again");
 		}else{
-			intBoard = intNewBoard;
+			intBoard[intPieceCoordinate[0]][intPieceCoordinate[1]] = intPlayer;
 			intPlayer = intPlayer%2+1;
+			intMoveCount++;
 		}
+	
 	}
 		
 	}

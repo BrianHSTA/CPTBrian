@@ -2,23 +2,26 @@ import arc.*;
 
 public class connect4methods{
 	
-	public static int[][] updateBoard(int[][] intBoard, int intMove, int intPlayer){
-		//Update the board by placing a piece in user inputted column
-		//Check row by row in a column from bottom to top
-	
-		//If the row closest to the bottom is empty, place piece, return board
+	public static int[] intPieceCoordinate(int[][] intBoard, int intMove, int intPlayer){
+		int intPieceCoordinate[];
+		intPieceCoordinate = new int[2];
 		int intCount = 5;
+			//Check row by row in a column from bottom to top
+		//If the row closest to the bottom is empty, return coordinate of empty slot
 		while (intCount >= 0){
 			if (intBoard[intMove][intCount] != 1 && intBoard[intMove][intCount] != 2){
-				intBoard[intMove][intCount] = intPlayer;
-				return intBoard;
+				intPieceCoordinate[0] = intMove;
+				intPieceCoordinate[1] = intCount;
+				return intPieceCoordinate;
 			}else{
 				intCount = intCount-1;
 			}
 		}
-		//If no pieces are placed due to a full row, return an unchanged board
+		//If no available placement in the column return negative coordinates
 		//Note to self: Check if board is unchanged. If it is, do not move onto next player and output invalid move 
-		return intBoard;
+		intPieceCoordinate[0] = -1;
+		intPieceCoordinate[1] = -1;
+		return intPieceCoordinate;
 		
 	}
 	
