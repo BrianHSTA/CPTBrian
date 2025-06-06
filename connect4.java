@@ -7,6 +7,8 @@ import java.awt.Font;
 public class connect4{
 	public static void main(String[] args){
 		//Console con = new Console();
+		
+		//READING DATA FROM LAST THEMES FOR THE GRAPHIC SETTINGS
 		TextInputFile lasttheme = new TextInputFile("lasttheme.txt");
 		String strThemeName = lasttheme.readLine();
 		
@@ -29,16 +31,30 @@ public class connect4{
 		
 		
 		
-		//0 = menu, 1 = play game, 2 = leaderboard, 3 = load theme, 4 == quit
+		//0 = menu, 1 = play game, 2 = leaderboard, 3 = load theme, 4 = quit
 		int intScreen = 0;
+		int intCount;
+		int intCount2;
 		
+		
+		//INITIALIZE CONNECT4 GAME VARIABLES
+		int intBoard[][];
+		intBoard = new int[7][6];
+		int intPieceCoordinate[];
+		intPieceCoordinate = new int[2];
+		int intMove;
+		int intPlayer;
+		int intMoveCount;
+		boolean blnRun;
+		
+		//BEGINNING OF CONSOLE
 		Console con = new Console(strTitle, 700,700);
 		BufferedImage imgLogo = con.loadImage("C4Logo.png");
 		while (intScreen != 4){
 			if (intScreen == 0){
 				//set the background
 				//con.setDrawColor(Color.BLACK);
-				//con.fillRect(0,0,700,700);
+				//con.fillRect(0,0,700,700); first 2 numbers are point one, 2nd nums are increase from point 1
 				con.setDrawColor(Color.WHITE);
 				con.drawString("Connect 4", 275,140);
 				con.drawString("Play Game (1)", 100,245);
@@ -49,8 +65,50 @@ public class connect4{
 				con.drawImage(imgLogo, 130, -50);
 				intScreen = con.readInt();
 			}else if (intScreen == 1){
+				intCount = 0;//y
+				intCount2 = 0;//x
 				con.setDrawColor(new Color(intBoardRGB[0], intBoardRGB[1], intBoardRGB[2]));
-				con.fillRect(50,75,600,550);
+				con.fillRect(70,110,560,480);
+				
+				con.setDrawColor(Color.BLACK);
+				for (intCount = 0; intCount < 6; intCount++){
+					for (intCount2 = 0; intCount2 < 7; intCount2++){
+						con.fillOval(80+intCount2*80,120+intCount*80,60,60);
+					}
+				}
+				
+				//BEGINNING OF CONNECT 4 CODE
+				intPlayer = 1;
+				intMoveCount = 0;
+				blnRun = true;
+				
+				
+				
+				while (intMoveCount <= 42 && blnRun == true){
+					intMove = con.readInt();
+					intMove--;
+					intPieceCoordinate = connect4methods.PieceCoordinate(intBoard, intMove, intPlayer);
+					
+					if (intPieceCoordinate[0] == -1 && intPieceCoordinate[1] == -1){
+						con.println("Invalid move, go again");
+					}else{
+						intBoard[intPieceCoordinate[0]][intPieceCoordinate[1]] = intPlayer;
+						con.println(intPieceCoordinate[0]+","+intPieceCoordinate[1]);
+						if (intPlayer == 1){
+							con.setDrawColor(new Color(intPlayer1RGB[0], intPlayer1RGB[1], intPlayer1RGB[2]));
+						}else if (intPlayer == 2){
+							con.setDrawColor(new Color(intPlayer2RGB[0], intPlayer2RGB[1], intPlayer2RGB[2]));
+						}
+						con.fillOval(80+intPieceCoordinate[0]*80,120+intPieceCoordinate[1]*80,60,60);
+						intPlayer = intPlayer%2+1;
+						intMoveCount++;
+					}
+				}
+				
+				
+				
+				
+				
 				
 			}
 			
