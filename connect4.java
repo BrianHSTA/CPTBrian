@@ -63,7 +63,11 @@ public class connect4{
 				con.drawString("Quit (4)", 545, 600);
 				
 				con.drawImage(imgLogo, 130, -50);
-				intScreen = con.readInt();
+				con.repaint();
+				intScreen = con.getKey()-'0'; //Since '1' = 49 and '0' = 48 on ASCII table
+				//System.out.println(intScreen);
+				con.setDrawColor(Color.BLACK);
+				con.fillRect(0,0,700,700);
 			}else if (intScreen == 1){
 				intCount = 0;//y
 				intCount2 = 0;//x
@@ -85,7 +89,8 @@ public class connect4{
 				
 				
 				while (intMoveCount <= 42 && blnRun == true){
-					intMove = con.readInt();
+					con.repaint();
+					intMove = con.getKey()-'0';
 					intMove--;
 					intPieceCoordinate = connect4methods.PieceCoordinate(intBoard, intMove, intPlayer);
 					
@@ -103,17 +108,15 @@ public class connect4{
 						intPlayer = intPlayer%2+1;
 						intMoveCount++;
 					}
-				if (connect4methods.blnCheckForWin(intBoard)==true){
-					blnRun = false;
-					con.println("Player "+(intPlayer%2+1)+" wins!");
-					}
+					if (connect4methods.blnCheckForWin(intBoard)==true){
+						blnRun = false;
+						con.println("Player "+(intPlayer%2+1)+" wins!");
+						}
 				}
-				
-				
-				
-				
-				
-				
+				intScreen = con.getKey()-'0';
+				con.setDrawColor(Color.BLACK);
+				con.fillRect(0,0,700,700);
+				intBoard = new int[7][6];
 			}
 			
 			con.repaint();
