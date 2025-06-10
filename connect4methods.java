@@ -63,5 +63,63 @@ public class connect4methods{
 		return intRGB;
 	}
 	
+	public static boolean blnCheckForWin(int[][] intBoard){
+		//Check vertical column
+		int intConnect = 0;
+		
+		int intColumn;
+		int intRow;
+		int intPlayer;
+		int intAdjustment;
+		boolean blnWin = false;
+		
+		//CHECKS VERTICAL CONNECTIONS
+		//Per column
+		for (intColumn = 0; intColumn <7; intColumn++){
+			//Per row
+			for (intRow = 0; intRow <3; intRow++){
+				if (intBoard[intColumn][intRow] != 0 && intBoard[intColumn][intRow] == intBoard[intColumn][intRow+1] && intBoard[intColumn][intRow] == intBoard[intColumn][intRow+2] && intBoard[intColumn][intRow] == intBoard[intColumn][intRow+3]){
+					return true;
+					}
+			}
+		}
+		//CHECKS HORIZONTAL CONNECTIONS
+		for (intRow = 0;intRow<6;intRow++){
+			for (intColumn = 0; intColumn<4; intColumn++){
+				if (intBoard[intColumn][intRow] != 0 && intBoard[intColumn][intRow] == intBoard[intColumn+1][intRow] && intBoard[intColumn][intRow] == intBoard[intColumn+2][intRow] && intBoard[intColumn][intRow] == intBoard[intColumn+3][intRow]){
+					return true;
+				}
+			}
+		}
+		
+		//CHECKS DIAGONAL CONNECTIONS
+		for (intColumn = 0;intColumn<4;intColumn++){
+			for (intRow = 0;intRow<3;intRow++){
+				if (intBoard[intColumn][intRow] != 0 && intBoard[intColumn][intRow] == intBoard[intColumn+1][intRow+1] && intBoard[intColumn][intRow] == intBoard[intColumn+2][intRow+2] && intBoard[intColumn][intRow] == intBoard[intColumn+3][intRow+3]){
+					return true;
+				}
+			}
+		}
+		for (intColumn = 3;intColumn<7;intColumn++){
+			for (intRow = 0;intRow<3;intRow++){
+				if (intBoard[intColumn][intRow] != 0 && intBoard[intColumn][intRow] == intBoard[intColumn-1][intRow+1] && intBoard[intColumn][intRow] == intBoard[intColumn-2][intRow+2] && intBoard[intColumn][intRow] == intBoard[intColumn-3][intRow+3]){
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	//public static int ConnectionAdjustment(int intPiece, int intPlayer, int intConnect){
+	//	if (intPiece == 0){//No piece
+	//		return 0;
+	//	}else if (intPiece == intPlayer){//Same piece
+	//		return intConnect++;
+	//	}else(intPiece != intPlayer){//Dif piece
+	//		return -1;
+	//	}
+	//}
+	
 }
 
