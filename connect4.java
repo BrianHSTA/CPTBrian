@@ -103,10 +103,6 @@ public class connect4{
 						intPlayer = intPlayer%2+1;
 						intMoveCount++;
 					}
-				if (connect4methods.blnCheckForWin(intBoard)==true){
-					blnRun = false;
-					con.println("Player "+(intPlayer%2+1)+" wins!");
-					}
 				}
 				
 				
