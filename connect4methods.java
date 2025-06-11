@@ -1,4 +1,7 @@
 import arc.*;
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.awt.Font;
 
 public class connect4methods{
 	
@@ -111,15 +114,10 @@ public class connect4methods{
 		return false;
 	}
 	
-	//public static int ConnectionAdjustment(int intPiece, int intPlayer, int intConnect){
-	//	if (intPiece == 0){//No piece
-	//		return 0;
-	//	}else if (intPiece == intPlayer){//Same piece
-	//		return intConnect++;
-	//	}else(intPiece != intPlayer){//Dif piece
-	//		return -1;
-	//	}
-	//}
+	public static void clear(Console con){
+		con.setDrawColor(Color.BLACK);
+		con.fillRect(0,0,700,700);
+	}
 	
 }
 
