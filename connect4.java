@@ -58,6 +58,7 @@ public class connect4{
 		int intDisplayedNames = 6;
 		String strName;
 		String strWins;
+		String strLeaderboardData[][];
 		//BEGINNING OF CONSOLE
 		Console con = new Console(strTitle, 700,700);
 		BufferedImage imgLogo = con.loadImage("C4Logo.png");
@@ -177,11 +178,14 @@ public class connect4{
 				con.drawString("LeaderBoard", 200, 100);
 				con.drawString("Return to Menu (0)", 430, 600);
 				intCount = 0;
+				
+				strLeaderboardData = new String[6][2];
+				
 				while (leaderboardIn.eof() == false && intCount<intDisplayedNames){
 						strName = leaderboardIn.readLine();
 						strWins = leaderboardIn.readLine();
-						con.drawString(strName, 100, 150+intCount*50);
-						con.drawString(strWins, 450, 150+intCount*50);
+						strLeaderboardData[intCount][0] = strName;
+						strLeaderboardData[intCount][1] = strWins;
 						intCount++;
 					}
 				
