@@ -47,7 +47,7 @@ public class connect4{
 		int intScreen = 0;
 		int intCount;
 		int intCount2;
-
+		
 		
 		//INITIALIZE CONNECT4 GAME VARIABLES
 		int intBoard[][];
@@ -76,7 +76,7 @@ public class connect4{
 		//BEGINNING OF CONSOLE
 		Console con = new Console("Connect 4", 700,700);
 		BufferedImage imgLogo = con.loadImage("C4Logo.png");
-		while (intScreen != 5){
+		while (intScreen != 6){
 			if (intScreen == 0){
 				//set the background
 				//con.setDrawColor(Color.BLACK);
@@ -87,11 +87,12 @@ public class connect4{
 				con.drawString("View Leaderboard (2)", 100,295);
 				con.drawString("Load Theme (3)", 100, 345);
 				con.drawString("Create Theme (4)", 100, 395);
-				con.drawString("Quit (5)", 545, 600);
+				con.drawString("Help (5)", 100, 445);
+				con.drawString("Quit (6)", 545, 600);
 				
 				con.drawImage(imgLogo, 130, -50);
-				intScreen = connect4methods.getNum(con, 1, 5);
-				//System.out.println(intScreen);
+				intScreen = connect4methods.getNum(con, 1, 6);
+				System.out.println("Screen: "+intScreen);
 				connect4methods.clear(con);	
 			}
 			
@@ -117,8 +118,8 @@ public class connect4{
 				blnLoop = true;
 				while (blnLoop == true){
 					con.setDrawColor(Color.WHITE);
-					con.drawString("Player 1 - "+strP1Name, 80,20);
-					con.drawString("Player 2 - "+strP2Name, 420,20);
+					con.drawString("P1 "+strP1Name+" - wins: "+intP1Wins, 80,20);
+					con.drawString("P2 "+strP2Name+" - wins: "+intP2Wins, 420,20);
 				
 					intCount = 0;//y
 					intCount2 = 0;//x
@@ -133,9 +134,9 @@ public class connect4{
 					}
 					con.setDrawColor(Color.WHITE);
 					for (intCount = 1;intCount < 8;intCount++){
-						con.drawString("("+intCount+")",15+intCount*80, 610);
+						con.drawString("("+intCount+")",15+intCount*80, 65);
 					}
-					con.drawString(strTitle,300, 60);
+					con.drawString(strTitle,300, 610);
 					//BEGINNING OF CONNECT 4 CODE
 					intPlayer = 1;
 					intMoveCount = 0;
@@ -156,7 +157,7 @@ public class connect4{
 							con.fillRect(289,650,220,40);
 						}else{
 							intBoard[intPieceCoordinate[0]][intPieceCoordinate[1]] = intPlayer;
-							//con.println(intPieceCoordinate[0]+","+intPieceCoordinate[1]);
+							System.out.println("("+intPieceCoordinate[0]+","+intPieceCoordinate[1]+")");
 							if (intPlayer == 1){
 								con.setDrawColor(new Color(intP1RGB[0], intP1RGB[1], intP1RGB[2]));
 							}else if (intPlayer == 2){
@@ -176,13 +177,13 @@ public class connect4{
 					//Ask if players want to play again
 					con.setDrawColor(Color.WHITE);
 					if (blnRun==false){
-						con.drawString("Player "+(intPlayer%2+1)+" wins!", 200,100);
+						con.drawString("Player "+(intPlayer%2+1)+" wins!", 270,250);
 						if ((intPlayer%2+1)==1){intP1Wins++;}
 						else{intP2Wins++;}
 						}
-					else{con.drawString("Tie", 200,100);}
-					con.drawString("Return to Menu (0)", 200,180);
-					con.drawString("Play Again (1)", 200,230);
+					else{con.drawString("Tie", 335,250);}
+					con.drawString("Return to Menu (0)", 250,330);
+					con.drawString("Play Again (1)", 270,360);
 					intScreen = connect4methods.getNum(con, 0, 1);
 					connect4methods.clear(con);
 					intBoard = new int[7][6];
@@ -199,9 +200,8 @@ public class connect4{
 			else if (intScreen == 2){
 				leaderboardIn = new TextInputFile("leaderboards.txt");
 				intLeaderboardLength = connect4methods.FileLength(leaderboardIn);
-				System.out.println(intLeaderboardLength);
 				intLeaderboardLength = intLeaderboardLength/2;
-				System.out.println(intLeaderboardLength);
+				System.out.println("Leaderboard Length: "+intLeaderboardLength);
 				leaderboardIn = new TextInputFile("leaderboards.txt");
 				
 				con.setDrawColor(Color.WHITE);
@@ -219,7 +219,7 @@ public class connect4{
 					}
 				strLeaderboardData = connect4methods.BubbleSort(strLeaderboardData,intLeaderboardLength);
 				
-				//for (intCount=0;intCount<intLeaderboardLength;intCount++){con.println(strLeaderboardData[intCount][0]+"-"+strLeaderboardData[intCount][1]);}
+				for (intCount=0;intCount<intLeaderboardLength;intCount++){System.out.println(strLeaderboardData[intCount][0]+"-"+strLeaderboardData[intCount][1]);}
 				intLeaderboardDisplay = intLeaderboardLength;
 				if (intLeaderboardDisplay > 8){intLeaderboardDisplay = 8;}
 				
@@ -310,6 +310,15 @@ public class connect4{
 				connect4methods.clear(con);
 				con.clear();
 				
+			}
+			else if (intScreen == 5){
+				con.setDrawColor(Color.WHITE);
+				con.drawString("Help", 330, 100);
+				con.println("\n\n\n\n\n\nTwo players have colored disks that they drop to the\nbottom of the Connect 4 board.To win the game,players\nmust aim to create a connection of 4 discs vertically,\nhorizontally, or diagonally while blocking the\nopponent from accomplishing the same.\n\nTip: control the center, create traps, predict opponents\nmoves, keep an eye on connections of 3.");
+				con.drawString("Return to Menu (0)", 430, 580);
+				intScreen = connect4methods.getNum(con, 0, 0);
+				connect4methods.clear(con);
+				con.clear();
 			}
 		}
 		System.exit(0);
