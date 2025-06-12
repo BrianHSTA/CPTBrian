@@ -143,12 +143,17 @@ public class connect4methods{
 		con.repaint();
 		
 		int intNum=max+1;
-		con.setDrawColor(Color.WHITE);
 		while (intNum > max || intNum < min){
 			intNum = con.getKey()-'0';
 			if (intNum > max || intNum < min){
 				con.repaint();
-				con.drawString("Invalid Input", 280, 620);
+				con.setDrawColor(Color.WHITE);
+				con.drawString("Invalid Input", 280, 650);
+				//con.repaint();
+				con.sleep(300);
+				con.setDrawColor(Color.BLACK);
+				con.fillRect(280,650,200,40);
+				con.repaint();
 				}
 			}
 		return intNum;

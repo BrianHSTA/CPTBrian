@@ -8,29 +8,39 @@ public class connect4{
 	public static void main(String[] args){
 		//Console con = new Console();
 		
+		int intInput;
 		//READING DATA FROM LAST THEMES FOR THE GRAPHIC SETTINGS
+		//INITIALIZE THEME VARIABLES
 		TextInputFile themesIn = new TextInputFile("themes.txt");
-		TextOutputFile themesOut = new TextOutputFile("themes.txt");
-		TextInputFile lasttheme = new TextInputFile("lasttheme.txt");
-		String strThemeName = lasttheme.readLine();
+		TextOutputFile themesOut = new TextOutputFile("themes.txt", true);
+		String strNewThemeName;
+		String strNewP1RGB;
+		String strNewP2RGB;
+		String strNewBoardRGB;
+		String strNewTitle;
+		int intThemesLength;
+		int intThemesDisplay;
 		
-		String strPlayer1RGB = lasttheme.readLine();
+		TextInputFile lastthemeIn = new TextInputFile("lasttheme.txt");
+		TextOutputFile lastthemeOut;
+		String strThemeName = lastthemeIn.readLine();
+		
+		String strP1RGB = lastthemeIn.readLine();
 		int intP1RGB[];
 		intP1RGB = new int[3]; 
-		intP1RGB = connect4methods.StrRGBtoIntRGB(strPlayer1RGB);
+		intP1RGB = connect4methods.StrRGBtoIntRGB(strP1RGB);
 		
-		String strPlayer2RGB = lasttheme.readLine();
+		String strP2RGB = lastthemeIn.readLine();
 		int intP2RGB[];
 		intP2RGB = new int[3]; 
-		intP2RGB = connect4methods.StrRGBtoIntRGB(strPlayer2RGB);
+		intP2RGB = connect4methods.StrRGBtoIntRGB(strP2RGB);
 		
-		String strBoardRGB = lasttheme.readLine();
+		String strBoardRGB = lastthemeIn.readLine();
 		int intBoardRGB[];
 		intBoardRGB = new int[3]; 
 		intBoardRGB = connect4methods.StrRGBtoIntRGB(strBoardRGB);
 		
-		String strTitle = lasttheme.readLine();
-		
+		String strTitle = lastthemeIn.readLine();
 		
 		
 		//0 = menu, 1 = play game, 2 = leaderboard, 3 = load theme, 4 = quit
@@ -64,7 +74,7 @@ public class connect4{
 		int intLeaderboardLength;
 		int intLeaderboardDisplay;
 		//BEGINNING OF CONSOLE
-		Console con = new Console(strTitle, 700,700);
+		Console con = new Console("Connect 4", 700,700);
 		BufferedImage imgLogo = con.loadImage("C4Logo.png");
 		while (intScreen != 5){
 			if (intScreen == 0){
@@ -80,7 +90,7 @@ public class connect4{
 				con.drawString("Quit (5)", 545, 600);
 				
 				con.drawImage(imgLogo, 130, -50);
-				intScreen = connect4methods.getNum(con, 0, 5);
+				intScreen = connect4methods.getNum(con, 1, 5);
 				//System.out.println(intScreen);
 				connect4methods.clear(con);	
 			}
@@ -125,7 +135,7 @@ public class connect4{
 					for (intCount = 1;intCount < 8;intCount++){
 						con.drawString("("+intCount+")",15+intCount*80, 610);
 					}
-					
+					con.drawString(strTitle,300, 60);
 					//BEGINNING OF CONNECT 4 CODE
 					intPlayer = 1;
 					intMoveCount = 0;
@@ -138,7 +148,12 @@ public class connect4{
 						intPieceCoordinate = connect4methods.PieceCoordinate(intBoard, intMove, intPlayer);
 						
 						if (intPieceCoordinate[0] == -1 && intPieceCoordinate[1] == -1){
-							con.println("Invalid move, go again");
+							con.setDrawColor(Color.WHITE);
+							con.drawString("Invalid Move", 290, 650);
+							con.repaint();
+							con.sleep(300);
+							con.setDrawColor(Color.BLACK);
+							con.fillRect(289,650,220,40);
 						}else{
 							intBoard[intPieceCoordinate[0]][intPieceCoordinate[1]] = intPlayer;
 							//con.println(intPieceCoordinate[0]+","+intPieceCoordinate[1]);
@@ -191,7 +206,7 @@ public class connect4{
 				
 				con.setDrawColor(Color.WHITE);
 				con.drawString("LeaderBoard", 290, 100);
-				con.drawString("Return to Menu (0)", 430, 600);
+				con.drawString("Return to Menu (0)", 430, 580);
 				
 				strLeaderboardData = new String[intLeaderboardLength][2];
 				intCount = 0;
@@ -212,23 +227,92 @@ public class connect4{
 					con.drawString(strLeaderboardData[intLeaderboardLength-intCount][0], 100, 120+intCount*50);
 					con.drawString(strLeaderboardData[intLeaderboardLength-intCount][1], 580, 120+intCount*50);
 				}
-				System.out.println(intLeaderboardLength+"-"+strLeaderboardData[0][0]+"-"+strLeaderboardData[0][1]);
-
-
 				intScreen = connect4methods.getNum(con, 0, 0);
 				connect4methods.clear(con);
-
 				}
 			
 			else if (intScreen == 3){
+				themesIn = new TextInputFile("themes.txt");
+				con.setDrawColor(Color.WHITE);
+				con.drawString("Load Theme",290,100);
+				con.drawString("Return to Menu (0)", 430, 580);
+				intThemesLength = connect4methods.FileLength(themesIn);
+				intThemesLength = intThemesLength/5;
+				themesIn = new TextInputFile("themes.txt");
+				//con.println(intThemesLength);
+				//intCount = con.readInt();
+				if (intThemesLength>8){intThemesLength=8;}
+				for (intCount = 1;intCount<=intThemesLength;intCount++){
+					con.drawString("("+intCount+") "+themesIn.readLine(),230,120+intCount*50);
+					themesIn.readLine();
+					themesIn.readLine();
+					themesIn.readLine();
+					themesIn.readLine();
+				}
+				intInput = connect4methods.getNum(con, 0, intThemesLength);
+				while (intInput!=0){
+						
+					if (intInput!=0){
+						themesIn = new TextInputFile("themes.txt");
+						lastthemeOut = new TextOutputFile("lasttheme.txt");
+						for (intCount=0;intCount<intInput-1;intCount++){
+							for (intCount2=0;intCount2<5;intCount2++){themesIn.readLine();}
+						}
+						for (intCount=0;intCount<5;intCount++){lastthemeOut.println(themesIn.readLine());}
+						con.drawString("Updated Theme",275,530);
+					}
+					intInput = connect4methods.getNum(con, 0, intThemesLength);
+					
+				}
+				lastthemeIn = new TextInputFile("lasttheme.txt");
+				strThemeName = lastthemeIn.readLine();
+				strP1RGB = lastthemeIn.readLine();
+				intP1RGB = connect4methods.StrRGBtoIntRGB(strP1RGB);
+				strP2RGB = lastthemeIn.readLine(); 
+				intP2RGB = connect4methods.StrRGBtoIntRGB(strP2RGB);
+				strBoardRGB = lastthemeIn.readLine();
+				intBoardRGB = connect4methods.StrRGBtoIntRGB(strBoardRGB);
+				strTitle = lastthemeIn.readLine();
 				
+				intScreen = 0;
+				connect4methods.clear(con);
+				
+			}
+			else if (intScreen == 4){
+				themesOut = new TextOutputFile("themes.txt", true);
+				con.setDrawColor(Color.WHITE);
+				con.drawString("Create Theme", 290, 100);
+				//con.print("1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15");
+				con.drawString("Theme Name: ", 150, 187);
+				con.drawString("Player 1 Color: ", 150, 259);
+				con.drawString("Player 2 Color: ", 150, 331);
+				con.drawString("Board Color: ", 150, 403);
+				con.drawString("Board Title: ", 150, 475);
+				con.drawString("Return to Menu (0)", 430, 580);
+				con.drawString("Example RGB Color Input: #,#,#", 185, 130);
+				con.print("\n\n\n\n\n\n\n\n                             ");
+				strNewThemeName = con.readLine();
+				con.print("\n\n                             ");
+				strNewP1RGB = con.readLine();
+				con.print("\n\n                             ");
+				strNewP2RGB = con.readLine();
+				con.print("\n\n                             ");
+				strNewBoardRGB = con.readLine();
+				con.print("\n\n                             ");
+				strNewTitle = con.readLine();
+				themesOut.println(strNewThemeName);
+				themesOut.println(strNewP1RGB);
+				themesOut.println(strNewP2RGB);
+				themesOut.println(strNewBoardRGB);
+				themesOut.println(strNewTitle);
+				con.drawString("Theme Successfully Added", 55, 580);
+				intScreen = connect4methods.getNum(con, 0, 0);
+				connect4methods.clear(con);
+				con.clear();
 				
 			}
 		}
-		con.repaint();
-		leaderboardOut.close();
-		leaderboardIn.close();
-		lasttheme.close();
+		System.exit(0);
 	}
 }
 
