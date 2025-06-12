@@ -30,10 +30,10 @@ public class connect4methods{
 	
 	public static int[] StrRGBtoIntRGB(String strRGB){
 		int intRGB[];
-		intRGB = new int[3];
+		intRGB = new int[3];//Add integer RGBs to RGB array of 3 int
 		boolean blnRun;
 		
-		//Red
+		//Convert red RGB
 		blnRun = true;
 		String strNum = "";
 		while (blnRun == true){
@@ -47,7 +47,7 @@ public class connect4methods{
 		}
 		intRGB[0] = Integer.parseInt(strNum);
 		
-		//Green
+		//Convert green RGB
 		blnRun = true;
 		strNum = "";
 		while (blnRun == true){
@@ -61,7 +61,7 @@ public class connect4methods{
 		}
 		intRGB[1] = Integer.parseInt(strNum);
 		
-		//Blue
+		//Convert blue RGB
 		intRGB[2] = Integer.parseInt(strRGB);
 		return intRGB;
 	}
@@ -124,16 +124,19 @@ public class connect4methods{
 		int intCount2;
 		String strNameTemp;
 		String strWinsTemp;
+		//Bubble sort
 		for (intCount = 0; intCount < intArrayLength-1; intCount++){
 			for (intCount2 = 0; intCount2 < intArrayLength-1; intCount2++){
+				//If player has more wins than the next player
 				if (Integer.parseInt(strArray[intCount2][1]) > Integer.parseInt(strArray[intCount2+1][1])){
+					//Swap names
 					strNameTemp = strArray[intCount2][0];
 					strArray[intCount2][0] = strArray[intCount2+1][0];
 					strArray[intCount2+1][0] = strNameTemp;
-					
-					strNameTemp = strArray[intCount2][1];
+					//Swap wins
+					strWinsTemp = strArray[intCount2][1];
 					strArray[intCount2][1] = strArray[intCount2+1][1];
-					strArray[intCount2+1][1] = strNameTemp;
+					strArray[intCount2+1][1] = strWinsTemp;
 				}
 			}
 		}
@@ -143,8 +146,10 @@ public class connect4methods{
 		con.repaint();
 		
 		int intNum=max+1;
+		//Keep running until user enters a valid number
 		while (intNum > max || intNum < min){
 			intNum = con.getKey()-'0';
+			//If invalid input, notify user and ask for new input
 			if (intNum > max || intNum < min){
 				con.repaint();
 				con.setDrawColor(Color.WHITE);
@@ -161,6 +166,7 @@ public class connect4methods{
 	}
 	public static int FileLength(TextInputFile file){
 		int intFileLength = 0;
+		//Reads a file line and adds to counter until all lines are read and length is obtained
 		while (file.eof() == false){
 				file.readLine();
 				intFileLength++;
