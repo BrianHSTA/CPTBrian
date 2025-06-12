@@ -66,7 +66,7 @@ public class connect4methods{
 		return intRGB;
 	}
 	
-	public static boolean blnCheckForWin(int[][] intBoard){
+	public static boolean CheckForWin(int[][] intBoard){
 		//Check vertical column
 		int intConnect = 0;
 		
@@ -119,5 +119,48 @@ public class connect4methods{
 		con.fillRect(0,0,700,700);
 	}
 	
+	public static String[][] BubbleSort(String[][] strArray, int intArrayLength){
+		int intCount;
+		int intCount2;
+		String strNameTemp;
+		String strWinsTemp;
+		for (intCount = 0; intCount < intArrayLength-1; intCount++){
+			for (intCount2 = 0; intCount2 < intArrayLength-1; intCount2++){
+				if (Integer.parseInt(strArray[intCount2][1]) > Integer.parseInt(strArray[intCount2+1][1])){
+					strNameTemp = strArray[intCount2][0];
+					strArray[intCount2][0] = strArray[intCount2+1][0];
+					strArray[intCount2+1][0] = strNameTemp;
+					
+					strNameTemp = strArray[intCount2][1];
+					strArray[intCount2][1] = strArray[intCount2+1][1];
+					strArray[intCount2+1][1] = strNameTemp;
+				}
+			}
+		}
+		return strArray;
+	}
+	public static int getNum(Console con, int min, int max){
+		con.repaint();
+		
+		int intNum=max+1;
+		con.setDrawColor(Color.WHITE);
+		while (intNum > max || intNum < min){
+			intNum = con.getKey()-'0';
+			if (intNum > max || intNum < min){
+				con.repaint();
+				con.drawString("Invalid Input", 280, 620);
+				}
+			}
+		return intNum;
+		
+	}
+	public static int FileLength(TextInputFile file){
+		int intFileLength = 0;
+		while (file.eof() == false){
+				file.readLine();
+				intFileLength++;
+			}
+		return intFileLength;
+	}
+	
 }
-

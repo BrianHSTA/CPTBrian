@@ -9,6 +9,8 @@ public class connect4{
 		//Console con = new Console();
 		
 		//READING DATA FROM LAST THEMES FOR THE GRAPHIC SETTINGS
+		TextInputFile themesIn = new TextInputFile("themes.txt");
+		TextOutputFile themesOut = new TextOutputFile("themes.txt");
 		TextInputFile lasttheme = new TextInputFile("lasttheme.txt");
 		String strThemeName = lasttheme.readLine();
 		
@@ -59,10 +61,12 @@ public class connect4{
 		String strName;
 		String strWins;
 		String strLeaderboardData[][];
+		int intLeaderboardLength;
+		int intLeaderboardDisplay;
 		//BEGINNING OF CONSOLE
 		Console con = new Console(strTitle, 700,700);
 		BufferedImage imgLogo = con.loadImage("C4Logo.png");
-		while (intScreen != 4){
+		while (intScreen != 5){
 			if (intScreen == 0){
 				//set the background
 				//con.setDrawColor(Color.BLACK);
@@ -72,11 +76,11 @@ public class connect4{
 				con.drawString("Play Game (1)", 100,245);
 				con.drawString("View Leaderboard (2)", 100,295);
 				con.drawString("Load Theme (3)", 100, 345);
-				con.drawString("Quit (4)", 545, 600);
+				con.drawString("Create Theme (4)", 100, 395);
+				con.drawString("Quit (5)", 545, 600);
 				
 				con.drawImage(imgLogo, 130, -50);
-				con.repaint();
-				intScreen = con.getKey()-'0'; //Since '1' = 49 and '0' = 48 on ASCII table
+				intScreen = connect4methods.getNum(con, 0, 5);
 				//System.out.println(intScreen);
 				connect4methods.clear(con);	
 			}
@@ -86,12 +90,16 @@ public class connect4{
 			else if (intScreen == 1){
 				
 				con.setDrawColor(Color.WHITE);
-				con.drawString("Player 1 Name:", 250,350);
+				con.drawString("Player 1 Name:", 250,200);
+				con.print("\n\n\n\n\n\n\n\n\n\n\n                        ");
 				strP1Name = con.readLine();
+				con.clear();
 				connect4methods.clear(con);
 				con.setDrawColor(Color.WHITE);
-				con.drawString("Player 2 Name:", 250,350);
+				con.drawString("Player 2 Name:", 250,200);
+				con.print("\n\n\n\n\n\n\n\n\n\n\n                        ");
 				strP2Name = con.readLine();
+				con.clear();
 				connect4methods.clear(con);
 				
 				intP1Wins = 0;
@@ -113,7 +121,10 @@ public class connect4{
 							con.fillOval(80+intCount2*80,120+intCount*80,60,60);
 						}
 					}
-					
+					con.setDrawColor(Color.WHITE);
+					for (intCount = 1;intCount < 8;intCount++){
+						con.drawString("("+intCount+")",15+intCount*80, 610);
+					}
 					
 					//BEGINNING OF CONNECT 4 CODE
 					intPlayer = 1;
@@ -122,8 +133,7 @@ public class connect4{
 					
 
 					while (intMoveCount < 42 && blnRun == true){
-						con.repaint();
-						intMove = con.getKey()-'0';
+						intMove = connect4methods.getNum(con, 1, 7);
 						intMove--;
 						intPieceCoordinate = connect4methods.PieceCoordinate(intBoard, intMove, intPlayer);
 						
@@ -141,7 +151,7 @@ public class connect4{
 							intPlayer = intPlayer%2+1;
 							intMoveCount++;
 						}
-						if (connect4methods.blnCheckForWin(intBoard)==true){
+						if (connect4methods.CheckForWin(intBoard)==true){
 							blnRun = false;
 							}
 					}
@@ -151,15 +161,14 @@ public class connect4{
 					//Ask if players want to play again
 					con.setDrawColor(Color.WHITE);
 					if (blnRun==false){
-						con.drawString("Player "+(intPlayer%2+1)+" wins!", 275,100);
+						con.drawString("Player "+(intPlayer%2+1)+" wins!", 200,100);
 						if ((intPlayer%2+1)==1){intP1Wins++;}
 						else{intP2Wins++;}
 						}
-					else{con.drawString("Tie", 275,100);}
-					con.drawString("Return to Menu (0)", 275,150);
-					con.drawString("Play Again (1)", 275,200);
-					con.repaint();
-					intScreen = con.getKey()-'0';
+					else{con.drawString("Tie", 200,100);}
+					con.drawString("Return to Menu (0)", 200,180);
+					con.drawString("Play Again (1)", 200,230);
+					intScreen = connect4methods.getNum(con, 0, 1);
 					connect4methods.clear(con);
 					intBoard = new int[7][6];
 					if (intScreen == 0){blnLoop = false;}//If players choose menu, end game loop
@@ -174,28 +183,52 @@ public class connect4{
 			
 			else if (intScreen == 2){
 				leaderboardIn = new TextInputFile("leaderboards.txt");
+				intLeaderboardLength = connect4methods.FileLength(leaderboardIn);
+				System.out.println(intLeaderboardLength);
+				intLeaderboardLength = intLeaderboardLength/2;
+				System.out.println(intLeaderboardLength);
+				leaderboardIn = new TextInputFile("leaderboards.txt");
+				
 				con.setDrawColor(Color.WHITE);
-				con.drawString("LeaderBoard", 200, 100);
+				con.drawString("LeaderBoard", 290, 100);
 				con.drawString("Return to Menu (0)", 430, 600);
+				
+				strLeaderboardData = new String[intLeaderboardLength][2];
 				intCount = 0;
-				
-				strLeaderboardData = new String[6][2];
-				
-				while (leaderboardIn.eof() == false && intCount<intDisplayedNames){
+				while (leaderboardIn.eof() == false){
 						strName = leaderboardIn.readLine();
 						strWins = leaderboardIn.readLine();
 						strLeaderboardData[intCount][0] = strName;
 						strLeaderboardData[intCount][1] = strWins;
 						intCount++;
 					}
+				strLeaderboardData = connect4methods.BubbleSort(strLeaderboardData,intLeaderboardLength);
 				
-				con.repaint();
-				intScreen = con.getKey()-'0';
-				connect4methods.clear(con);
-				//Sort leaderboards
+				//for (intCount=0;intCount<intLeaderboardLength;intCount++){con.println(strLeaderboardData[intCount][0]+"-"+strLeaderboardData[intCount][1]);}
+				intLeaderboardDisplay = intLeaderboardLength;
+				if (intLeaderboardDisplay > 8){intLeaderboardDisplay = 8;}
+				
+				for (intCount=1;intCount<=intLeaderboardDisplay;intCount++){
+					con.drawString(strLeaderboardData[intLeaderboardLength-intCount][0], 100, 120+intCount*50);
+					con.drawString(strLeaderboardData[intLeaderboardLength-intCount][1], 580, 120+intCount*50);
 				}
+				System.out.println(intLeaderboardLength+"-"+strLeaderboardData[0][0]+"-"+strLeaderboardData[0][1]);
+
+
+				intScreen = connect4methods.getNum(con, 0, 0);
+				connect4methods.clear(con);
+
+				}
+			
+			else if (intScreen == 3){
+				
+				
+			}
 		}
 		con.repaint();
+		leaderboardOut.close();
+		leaderboardIn.close();
+		lasttheme.close();
 	}
 }
 
